@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2FA验证 - 双重认证码生成工具</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>2FA验证</h1>
+            <p class="description">双重验证码/二步验证码获取工具（相当于谷歌身份验证器的网页版），使用时任选种方式输入密钥获取即可。</p>
+            
+            <div class="input-section">
+                <input 
+                    type="text" 
+                    id="secretKey" 
+                    class="secret-input" 
+                    placeholder="输入密钥或粘贴密钥"
+                />
+            </div>
+
+            <div class="button-group">
+                <button id="generateBtn" class="btn btn-primary">点击获取验证码</button>
+                <span class="implement-note">JS实现</span>
+            </div>
+
+            <div class="info-section">
+                <div class="info-row">
+                    <span class="label">双重密钥为：</span>
+                    <span id="secretDisplay" class="value">-</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="label">当前验证码：</span>
+                    <span id="tokenDisplay" class="value token-large">000000</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="label">剩余的时间：</span>
+                    <span id="timeDisplay" class="value">30 秒</span>
+                </div>
+            </div>
+
+            <div class="qrcode-section">
+                <button id="qrcodeBtn" class="btn btn-qrcode">生成二维码</button>
+                <div id="qrcodeContainer" class="qrcode-container hidden"></div>
+            </div>
+
+            <div id="error" class="error-message"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
