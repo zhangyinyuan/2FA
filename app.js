@@ -77,6 +77,7 @@ class TotpUI {
         this.secretDisplay = document.getElementById('secretDisplay');
         this.tokenDisplay = document.getElementById('tokenDisplay');
         this.timeDisplay = document.getElementById('timeDisplay');
+        this.copyBtn = document.getElementById('copyBtn');
         this.qrcodeContainer = document.getElementById('qrcodeContainer');
         this.errorMsg = document.getElementById('error');
         this.updateInterval = null;
@@ -87,6 +88,7 @@ class TotpUI {
     initEventListeners() {
         this.generateBtn.addEventListener('click', () => this.handleGenerateToken());
         this.qrcodeBtn.addEventListener('click', () => this.handleGenerateQRCode());
+        this.copyBtn.addEventListener('click', () => this.handleCopyToken());
         this.secretInput.addEventListener('change', () => {
             this.secretDisplay.textContent = this.secretInput.value.toUpperCase();
             this.qrcodeContainer.classList.add('hidden');
@@ -143,6 +145,50 @@ class TotpUI {
 
         updateCountdown();
         this.updateInterval = setInterval(updateCountdown, 1000);
+    }
+
+    async handleCopyToken() {
+        const token = this.tokenDisplay.textContent;
+        if (!token || token === '000000') {
+            alert('请先生成验证码');
+            return;
+        }
+
+        try {
+            await navigator.clipboard.writeText(token);
+            
+            // 显示复制成功反馈
+            const originalText = this.copyBtn.textContent;
+            this.copyBtn.textContent = '✓';
+            this.copyBtn.classList.add('copied');
+            
+            setTimeout(() => {
+                this.copyBtn.textContent = originalText;
+                this.copyBtn.classList.remove('copied');
+            }, 2000);
+        } catch (error) {
+            // 降级方案：使用旧的复制方法
+            const textarea = document.createElement('textarea');
+            textarea.value = token;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            
+            try {
+                document.execCommand('copy');
+                this.copyBtn.textContent = '✓';
+                this.copyBtn.classList.add('copied');
+                setTimeout(() => {
+                    this.copyBtn.textContent = '📋';
+                    this.copyBtn.classList.remove('copied');
+                }, 2000);
+            } catch (err) {
+                alert('复制失败，请手动复制');
+            }
+            
+            document.body.removeChild(textarea);
+        }
     }
 
     async handleGenerateQRCode() {
