@@ -3,12 +3,13 @@ FROM node:18-alpine
 # 设置工作目录
 WORKDIR /app
 
-# 复制package文件
-COPY package*.json ./
+# 只复制package.json（忽略lockfile）
+COPY package.json ./
 
 # 强制使用官方npm源并安装依赖
 RUN npm config set registry https://registry.npmjs.org/ && \
-    npm install --production
+    npm cache clean --force && \
+    npm install --production --no-package-lock
 
 # 复制应用代码
 COPY . .
