@@ -44,14 +44,18 @@ http://localhost:3000
 # 1) 首次部署时创建环境变量文件
 cp .env.example .env
 
-# 2) 可选：修改对外端口（例如8080）
-# 编辑 .env 中的 HOST_PORT=8080
+# 2) 可选：修改监听IP和端口（例如仅本机开放 127.0.0.1:13000）
+# 编辑 .env：
+# HOST_IP=127.0.0.1
+# HOST_PORT=13000
 
 # 3) 启动
 docker-compose up -d --build
 ```
 
-然后访问 `http://your-server-ip:${HOST_PORT}`（未配置时默认3000）
+默认访问 `http://your-server-ip:${HOST_PORT}`（未配置时默认 `0.0.0.0:3000`）
+
+如果设置为 `HOST_IP=127.0.0.1`，则仅服务器本机可访问（适合配合Nginx反代）。
 
 #### 方式二：手动Docker构建和运行
 
@@ -198,6 +202,7 @@ server {
 
 - `PORT`：服务器监听端口（默认：3000）
 - `NODE_ENV`：运行环境（development/production）
+- `HOST_IP`：宿主机监听IP（默认：0.0.0.0）
 - `HOST_PORT`：宿主机映射端口（默认：3000）
 
 ### 首次搭建与后续更新建议
@@ -207,7 +212,9 @@ server {
 git clone <repository-url> /opt/2fa-authenticator
 cd /opt/2fa-authenticator
 cp .env.example .env
-# 可选：编辑 .env，把 HOST_PORT 改成你要的端口
+# 可选：编辑 .env
+# HOST_IP=127.0.0.1
+# HOST_PORT=13000
 docker-compose up -d --build
 
 # 后续更新

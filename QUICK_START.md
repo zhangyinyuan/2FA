@@ -48,8 +48,9 @@ git clone <your-repo-url> .
 # 3. 首次部署：创建环境变量文件
 cp .env.example .env
 
-# 4. 如需自定义端口，编辑 .env（示例改为8080）
-# HOST_PORT=8080
+# 4. 如需自定义监听IP和端口（示例：127.0.0.1:13000）
+# HOST_IP=127.0.0.1
+# HOST_PORT=13000
 
 # 5. 启动应用
 docker-compose up -d --build
@@ -66,7 +67,8 @@ docker-compose logs -f
 不要修改 `docker-compose.yml`，只改 `.env`：
 
 ```env
-HOST_PORT=8080
+HOST_IP=127.0.0.1
+HOST_PORT=13000
 ```
 
 然后：
@@ -86,6 +88,7 @@ docker-compose up -d --build
 
 说明：
 - 端口配置保存在 `.env`（未纳入版本控制）
+- 可通过 `HOST_IP` 控制监听范围（`127.0.0.1` 仅本机，`0.0.0.0` 对外可访问）
 - 这样更新代码时不会因为 `docker-compose.yml` 被本地修改而冲突
 
 ---
