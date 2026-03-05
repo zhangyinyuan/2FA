@@ -80,9 +80,12 @@ class TotpUI {
         this.copyBtn = document.getElementById('copyBtn');
         this.qrcodeContainer = document.getElementById('qrcodeContainer');
         this.errorMsg = document.getElementById('error');
+        this.saveSecretCheckbox = document.getElementById('saveSecret');
         this.updateInterval = null;
+        this.storageKey = 'totp_secret_key';
 
         this.initEventListeners();
+        this.loadSavedSecret();
     }
 
     initEventListeners() {
@@ -93,9 +96,49 @@ class TotpUI {
             this.secretDisplay.textContent = this.secretInput.value.toUpperCase();
             this.qrcodeContainer.classList.add('hidden');
         });
+        this.saveSecretCheckbox.addEventListener('change', () => this.handleSaveSecretChange());
 
         // 页面加载时自动生成一次验证码
         this.handleGenerateToken();
+    }
+
+    loadSavedSecret() {
+        try {
+            const savedSecret = localStorage.getItem(this.storageKey);
+            if (savedSecret) {
+                this.secretInput.value = savedSecret;
+                this.saveSecretCheckbox.checked = true;
+            }
+        } catch (error) {
+            console.error('加载保存的密钥失败:', error);
+        }
+    }
+
+    handleSaveSecretChange() {
+        if (!this.saveSecretCheckbox.checked) {
+            // 取消勾选，清除保存的密钥
+            try {
+                localStorage.removeItem(this.storageKey);
+            } catch (error) {
+                console.error('清除保存的密钥失败:', error);
+            }
+        } else {
+            // 勾选时，如果当前有密钥则立即保存
+            const secret = this.secretInput.value.trim().toUpperCase();
+            if (secret) {
+                this.saveSecret(secret);
+            }
+        }
+    }
+
+    saveSecret(secret) {
+        if (this.saveSecretCheckbox.checked) {
+            try {
+                localStorage.setItem(this.storageKey, secret);
+            } catch (error) {
+                console.error('保存密钥失败:', error);
+            }
+        }
     }
 
     async handleGenerateToken() {
@@ -110,6 +153,8 @@ class TotpUI {
             this.errorMsg.classList.remove('show');
             await this.generateAndUpdateToken(secret);
             this.startCountdown();
+            // 成功生成后，如果勾选了保存，则保存密钥
+            this.saveSecret(secret);
         } catch (error) {
             this.showError(error.message);
         }
@@ -168,6 +213,7 @@ class TotpUI {
             }, 2000);
         } catch (error) {
             // 降级方案：使用旧的复制方法
+            const originalText = this.copyBtn.textContent;
             const textarea = document.createElement('textarea');
             textarea.value = token;
             textarea.style.position = 'fixed';
@@ -180,7 +226,7 @@ class TotpUI {
                 this.copyBtn.textContent = '✓';
                 this.copyBtn.classList.add('copied');
                 setTimeout(() => {
-                    this.copyBtn.textContent = '📋';
+                    this.copyBtn.textContent = originalText;
                     this.copyBtn.classList.remove('copied');
                 }, 2000);
             } catch (err) {

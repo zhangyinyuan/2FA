@@ -19,11 +19,16 @@
                     class="secret-input" 
                     placeholder="请输入 Base32 密钥（例如 JBSWY3DPEHPK3PXP）"
                 />
+                <div class="checkbox-section">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="saveSecret" />
+                        <span>保存密钥到浏览器本地，下次自动带入</span>
+                    </label>
+                </div>
             </div>
 
             <div class="button-group">
                 <button id="generateBtn" class="btn btn-primary">点击获取验证码</button>
-                <span class="implement-note">JS实现</span>
             </div>
 
             <div class="info-section">

@@ -103,9 +103,27 @@ h1 {
     background-color: #229954;
 }
 
-.implement-note {
-    color: #999;
-    font-size: 13px;
+.checkbox-section {
+    margin-top: 12px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: #666;
+    font-size: 14px;
+}
+
+.checkbox-label input[type="checkbox"] {
+    margin-right: 8px;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.checkbox-label span {
+    user-select: none;
 }
 
 .info-section {
@@ -156,7 +174,8 @@ h1 {
     border-radius: 6px;
     color: white;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 14px;
+    font-weight: 600;
     transition: all 0.3s ease;
     vertical-align: middle;
 }
@@ -234,9 +253,5 @@ h1 {
 
     .btn-primary {
         width: 100%;
-    }
-
-    .implement-note {
-        display: none;
     }
 }
