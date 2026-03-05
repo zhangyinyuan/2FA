@@ -41,10 +41,17 @@ http://localhost:3000
 #### 方式一：使用Docker Compose（推荐）
 
 ```bash
-docker-compose up -d
+# 1) 首次部署时创建环境变量文件
+cp .env.example .env
+
+# 2) 可选：修改对外端口（例如8080）
+# 编辑 .env 中的 HOST_PORT=8080
+
+# 3) 启动
+docker-compose up -d --build
 ```
 
-然后访问 `http://your-server-ip:3000`
+然后访问 `http://your-server-ip:${HOST_PORT}`（未配置时默认3000）
 
 #### 方式二：手动Docker构建和运行
 
@@ -191,6 +198,24 @@ server {
 
 - `PORT`：服务器监听端口（默认：3000）
 - `NODE_ENV`：运行环境（development/production）
+- `HOST_PORT`：宿主机映射端口（默认：3000）
+
+### 首次搭建与后续更新建议
+
+```bash
+# 首次搭建
+git clone <repository-url> /opt/2fa-authenticator
+cd /opt/2fa-authenticator
+cp .env.example .env
+# 可选：编辑 .env，把 HOST_PORT 改成你要的端口
+docker-compose up -d --build
+
+# 后续更新
+git pull
+docker-compose up -d --build
+```
+
+不要直接修改 `docker-compose.yml` 里的端口映射，避免 `git pull` 时出现冲突。
 
 ## 安全说明
 

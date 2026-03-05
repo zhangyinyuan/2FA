@@ -45,30 +45,48 @@ cd /opt/2fa-authenticator
 # 2. 上传/克隆项目文件
 git clone <your-repo-url> .
 
-# 3. 启动应用
-docker-compose up -d
+# 3. 首次部署：创建环境变量文件
+cp .env.example .env
 
-# 4. 查看日志
+# 4. 如需自定义端口，编辑 .env（示例改为8080）
+# HOST_PORT=8080
+
+# 5. 启动应用
+docker-compose up -d --build
+
+# 6. 查看日志
 docker-compose logs -f
 
-# 5. 访问应用
-# 打开浏览器：http://服务器IP:3000
+# 7. 访问应用
+# 打开浏览器：http://服务器IP:${HOST_PORT}
 ```
 
-### 更新端口（如果3000已被占用）
+### 修改端口（推荐方式）
 
-编辑 `docker-compose.yml`：
-```yaml
-services:
-  2fa-authenticator:
-    ports:
-      - "8080:3000"  # 改为8080
+不要修改 `docker-compose.yml`，只改 `.env`：
+
+```env
+HOST_PORT=8080
 ```
 
 然后：
 ```bash
 docker-compose up -d
 ```
+
+### 后续更新代码（避免git pull冲突）
+
+```bash
+# 1. 拉取最新代码
+git pull
+
+# 2. 重建并启动
+docker-compose up -d --build
+```
+
+说明：
+- 端口配置保存在 `.env`（未纳入版本控制）
+- 这样更新代码时不会因为 `docker-compose.yml` 被本地修改而冲突
 
 ---
 
