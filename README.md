@@ -2,6 +2,50 @@
 
 这是一个基于Web的TOTP（时间一次性密码）生成器，相当于Google Authenticator的网页版本。
 
+## 🚀 快速使用
+
+### Docker 一键启动（推荐）
+
+```bash
+# 拉取镜像并运行
+docker run -d -p 3000:3000 --name 2fa zhangyinyuan/2fa:latest
+
+# 访问
+http://your-server-ip:3000
+```
+
+### 自定义端口
+
+```bash
+# 映射到自定义端口（例如8080）
+docker run -d -p 8080:3000 --name 2fa zhangyinyuan/2fa:latest
+```
+
+### 使用 Docker Compose
+
+创建 `docker-compose.yml`：
+```yaml
+version: '3.8'
+services:
+  app:
+    image: zhangyinyuan/2fa:latest
+    container_name: 2fa
+    ports:
+      - "${HOST_IP:-0.0.0.0}:${HOST_PORT:-3000}:3000"
+    restart: unless-stopped
+```
+
+创建 `.env` 文件（可选）：
+```env
+HOST_IP=0.0.0.0
+HOST_PORT=3000
+```
+
+启动：
+```bash
+docker-compose up -d
+```
+
 ## 功能特性
 
 - ✅ **TOTP生成**：基于时间的一次性密码生成
