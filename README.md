@@ -200,10 +200,10 @@ server {
 
 ## 环境变量
 
-- `PORT`：服务器监听端口（默认：3000）
-- `NODE_ENV`：运行环境（development/production）
 - `HOST_IP`：宿主机监听IP（默认：0.0.0.0）
 - `HOST_PORT`：宿主机映射端口（默认：3000）
+
+说明：容器内应用端口固定为 `3000`（由 `docker-compose.yml` 控制），无需在 `.env` 中定义。
 
 ### 首次搭建与后续更新建议
 
